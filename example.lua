@@ -1,5 +1,3 @@
--- Dollarware example script
-
 -- Snag the ui loader function thingy (loadstring the link, but dont call it)
 local uiLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/topitbopit/dollarware/main/library.lua'))
 -- Because of the way the library loads, settings are handled on the loadstring call

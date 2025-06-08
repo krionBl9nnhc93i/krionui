@@ -407,7 +407,7 @@ local tooltip = {} do
                 
                 local title = Instance.new('TextLabel') do 
                     title.BackgroundTransparency = 1
-                    title.Font = 'Arial'
+                    title.Font = 'SourceSansLight'
                     title.Name = '#title'
                     title.RichText = true
                     title.Size = UDim2.fromScale(1, 1)
@@ -452,7 +452,7 @@ local tooltip = {} do
                 
                 local desc = Instance.new('TextLabel') do 
                     desc.BackgroundTransparency = 1
-                    desc.Font = 'Arial'
+                    desc.Font = 'SourceSansLight'
                     desc.Name = '#desc'
                     desc.RichText = true
                     desc.Size = UDim2.fromScale(1, 1)
@@ -614,7 +614,7 @@ local hint = {} do
                             
                             local hintOption = Instance.new('TextLabel') do 
                                 hintOption.BackgroundTransparency = 1
-                                --hintOption.Font = 'ArialItalic'
+                                --hintOption.Font = 'SourceSansLightItalic'
                                 hintOption.Name = '#hint'
                                 hintOption.RichText = true
                                 hintOption.Size = UDim2.new(1, 0, 0, 16)
@@ -2534,7 +2534,7 @@ do
                                     inputBox.BackgroundTransparency = 0.1
                                     inputBox.ClearTextOnFocus = true
                                     inputBox.ClipsDescendants = true
-                                    inputBox.Font = 'Arial'
+                                    inputBox.Font = 'SourceSansLight'
                                     inputBox.Name = '#input-box'
                                     inputBox.PlaceholderColor3 = theme.TextDim
                                     inputBox.PlaceholderText = 'enter value'
@@ -2580,7 +2580,7 @@ do
                             
                             local title = Instance.new('TextLabel') do 
                                 title.BackgroundTransparency = 1
-                                title.Font = 'Arial'
+                                title.Font = 'SourceSansLight'
                                 title.Name = '#title'
                                 title.Size = UDim2.new(1, 0, 1, -1)
                                 title.Text = 'red'
@@ -2606,7 +2606,7 @@ do
                             
                             local val = Instance.new('TextLabel') do 
                                 val.BackgroundTransparency = 1
-                                val.Font = 'Arial'
+                                val.Font = 'SourceSansLight'
                                 val.Name = '#val'
                                 val.Size = UDim2.new(1, 0, 1, -1)
                                 val.Text = '255'
@@ -2707,7 +2707,7 @@ do
                                     inputBox.BackgroundTransparency = 0.1
                                     inputBox.ClearTextOnFocus = true
                                     inputBox.ClipsDescendants = true
-                                    inputBox.Font = 'Arial'
+                                    inputBox.Font = 'SourceSansLight'
                                     inputBox.Name = '#input-box'
                                     inputBox.PlaceholderColor3 = theme.TextDim
                                     inputBox.PlaceholderText = 'enter value'
@@ -2746,7 +2746,7 @@ do
                             
                             local title = Instance.new('TextLabel') do 
                                 title.BackgroundTransparency = 1
-                                title.Font = 'Arial'
+                                title.Font = 'SourceSansLight'
                                 title.Name = '#title'
                                 title.Size = UDim2.new(1, 0, 1, -1)
                                 title.Text = 'green'
@@ -2772,7 +2772,7 @@ do
                             
                             local val = Instance.new('TextLabel') do 
                                 val.BackgroundTransparency = 1
-                                val.Font = 'Arial'
+                                val.Font = 'SourceSansLight'
                                 val.Name = '#val'
                                 val.Size = UDim2.new(1, 0, 1, -1)
                                 val.Text = '255'
@@ -2873,7 +2873,7 @@ do
                                     inputBox.BackgroundTransparency = 0.1
                                     inputBox.ClearTextOnFocus = true
                                     inputBox.ClipsDescendants = true
-                                    inputBox.Font = 'Arial'
+                                    inputBox.Font = 'SourceSansLight'
                                     inputBox.Name = '#input-box'
                                     inputBox.PlaceholderColor3 = theme.TextDim
                                     inputBox.PlaceholderText = 'enter value'
@@ -2912,7 +2912,7 @@ do
                             
                             local title = Instance.new('TextLabel') do 
                                 title.BackgroundTransparency = 1
-                                title.Font = 'Arial'
+                                title.Font = 'SourceSansLight'
                                 title.Name = '#title'
                                 title.Size = UDim2.new(1, 0, 1, -1)
                                 title.Text = 'blue'
@@ -2938,7 +2938,7 @@ do
                             
                             local val = Instance.new('TextLabel') do 
                                 val.BackgroundTransparency = 1
-                                val.Font = 'Arial'
+                                val.Font = 'SourceSansLight'
                                 val.Name = '#val'
                                 val.Size = UDim2.new(1, 0, 1, -1)
                                 val.Text = '255'
@@ -3915,7 +3915,7 @@ do
                     pageSelector.AutoButtonColor = false
                     pageSelector.BackgroundColor3 = theme.Button1
                     pageSelector.BackgroundTransparency = 0
-                    pageSelector.Font = 'Arial'
+                    pageSelector.Font = 'SourceSansLight'
                     pageSelector.Name = '#page-selector'
                     pageSelector.Size = UDim2.new(1, -8, 0, 20)
                     pageSelector.Text = ''
@@ -4241,7 +4241,7 @@ do
                     
                     local title = Instance.new('TextLabel') do 
                         title.BackgroundTransparency = 1
-                        title.Font = 'Arial'
+                        title.Font = 'SourceSansLight'
                         title.Name = '#title'
                         title.RichText = true
                         title.Size = UDim2.fromScale(1, 1)
@@ -4457,7 +4457,7 @@ do
                         
                         local label = Instance.new('TextLabel') do 
                             label.BackgroundTransparency = 1
-                            label.Font = 'Arial'
+                            label.Font = 'SourceSansLight'
                             label.Name = '#label'
                             label.RichText = true
                             label.Size = UDim2.fromScale(1, 1)
@@ -4774,7 +4774,7 @@ do
                             
                             local label = Instance.new('TextLabel') do 
                                 label.BackgroundTransparency = 1
-                                label.Font = 'Arial'
+                                label.Font = 'SourceSansLight'
                                 label.Name = '#label'
                                 label.RichText = true
                                 label.Size = UDim2.fromScale(1, 1)
@@ -4997,7 +4997,7 @@ do
                                 
                                 local label = Instance.new('TextLabel') do 
                                     label.BackgroundTransparency = 1
-                                    label.Font = 'Arial'
+                                    label.Font = 'SourceSansLight'
                                     label.Name = '#label'
                                     label.RichText = true
                                     label.Size = UDim2.fromScale(1, 1)
@@ -5151,7 +5151,7 @@ do
 
                 local label = Instance.new('TextLabel') do 
                     label.BackgroundTransparency = 1
-                    label.Font = 'Arial'
+                    label.Font = 'SourceSansLight'
                     label.Name = '#label'
                     label.RichText = true
                     label.Size = UDim2.fromScale(1, 1)
@@ -5295,7 +5295,7 @@ do
                             
                             local label = Instance.new('TextLabel') do 
                                 label.BackgroundTransparency = 1
-                                label.Font = 'Arial'
+                                label.Font = 'SourceSansLight'
                                 label.Name = '#label'
                                 label.RichText = true
                                 label.Size = UDim2.fromScale(1, 1)
@@ -5555,7 +5555,7 @@ do
                             
                             local label = Instance.new('TextLabel') do 
                                 label.BackgroundTransparency = 1
-                                label.Font = 'Arial'
+                                label.Font = 'SourceSansLight'
                                 label.Name = '#label'
                                 label.RichText = true
                                 label.Size = UDim2.fromScale(1, 1)
@@ -5908,7 +5908,7 @@ do
                             inputBox.BackgroundTransparency = 0.1
                             inputBox.ClearTextOnFocus = true
                             inputBox.ClipsDescendants = true
-                            inputBox.Font = 'Arial'
+                            inputBox.Font = 'SourceSansLight'
                             inputBox.Name = '#input-box'
                             inputBox.PlaceholderColor3 = theme.TextDim
                             inputBox.PlaceholderText = 'enter value'
@@ -5947,7 +5947,7 @@ do
                     
                     local title = Instance.new('TextLabel') do 
                         title.BackgroundTransparency = 1
-                        title.Font = 'Arial'
+                        title.Font = 'SourceSansLight'
                         title.Name = '#label'
                         title.Size = UDim2.fromScale(1, 1)
                         title.Text = 'slider'
@@ -5973,7 +5973,7 @@ do
                     
                     local val = Instance.new('TextLabel') do 
                         val.BackgroundTransparency = 1
-                        val.Font = 'Arial'
+                        val.Font = 'SourceSansLight'
                         val.Name = '#val'
                         val.Size = UDim2.fromScale(1, 1)
                         val.Text = '0'
@@ -6251,7 +6251,7 @@ do
                         
                         local label = Instance.new('TextLabel') do 
                             label.BackgroundTransparency = 1
-                            label.Font = 'Arial'
+                            label.Font = 'SourceSansLight'
                             label.Name = '#label'
                             label.RichText = true
                             label.Size = UDim2.fromScale(1, 1)
@@ -6627,7 +6627,7 @@ do
                         inputBox.BackgroundTransparency = 0
                         inputBox.ClearTextOnFocus = true
                         inputBox.ClipsDescendants = true
-                        inputBox.Font = 'Arial'
+                        inputBox.Font = 'SourceSansLight'
                         inputBox.Name = '#textbox'
                         inputBox.PlaceholderColor3 = theme.TextDim
                         inputBox.PlaceholderText = '...'
@@ -6673,7 +6673,7 @@ do
                         
                         local autoFill = Instance.new('TextLabel') do 
                             autoFill.BackgroundTransparency = 1
-                            autoFill.Font = 'Arial'
+                            autoFill.Font = 'SourceSansLight'
                             autoFill.Name = '#autofill'
                             autoFill.Size = UDim2.fromScale(1, 1)
                             autoFill.Text = 'autofill'
@@ -7180,7 +7180,7 @@ do
                         local title = Instance.new('TextLabel') do 
                             title.BackgroundTransparency = 1
                             title.BorderSizePixel = 0
-                            title.Font = 'Arial'
+                            title.Font = 'SourceSansLight'
                             title.Name = '#title'
                             title.Position = UDim2.fromOffset(24, 0)
                             title.RichText = true
@@ -7226,7 +7226,7 @@ do
                         local desc = Instance.new('TextLabel') do 
                             desc.BackgroundTransparency = 1
                             desc.BorderSizePixel = 0
-                            desc.Font = 'Arial'
+                            desc.Font = 'SourceSansLight'
                             desc.Name = '#desc'
                             desc.RichText = true
                             desc.Size = UDim2.fromScale(1, 1)
@@ -7390,7 +7390,7 @@ do
                         
                         local label = Instance.new('TextLabel') do 
                             label.BackgroundTransparency = 1
-                            label.Font = 'Arial'
+                            label.Font = 'SourceSansLight'
                             label.Name = '#label'
                             label.RichText = true
                             label.Size = UDim2.fromScale(1, 1)
@@ -7420,7 +7420,7 @@ do
                             hotkey.Active = false
                             hotkey.AnchorPoint = Vector2.new(1, 0)
                             hotkey.BackgroundTransparency = 1 
-                            hotkey.Font = 'Arial'
+                            hotkey.Font = 'SourceSansLight'
                             hotkey.Name = '#hotkey'
                             hotkey.Position = UDim2.new(1, -3, 0, 2)
                             hotkey.Size = UDim2.fromOffset(16, 16)

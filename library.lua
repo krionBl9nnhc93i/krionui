@@ -1,3 +1,17 @@
+local function destroyAllKrionUIFrom(parent)
+    for _, gui in ipairs(parent:GetChildren()) do
+        if gui:IsA("ScreenGui") and gui:FindFirstChild("#notif-container") then
+            gui:Destroy()
+        end
+    end
+end
+
+if gethui then
+    destroyAllKrionUIFrom(gethui())
+end
+
+destroyAllKrionUIFrom(game:GetService("CoreGui"))
+destroyAllKrionUIFrom(game.Players.LocalPlayer:WaitForChild("PlayerGui"))
 local inputService = game:GetService('UserInputService')
 local renderService = game:GetService('RunService')
 local tweenService = game:GetService('TweenService')

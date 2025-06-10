@@ -1,5 +1,6 @@
 local playerName = game.Players.LocalPlayer.Name --SHOW'S THE PLAYER NICKNAME
 local startTime = tick() --SCRIPT STARTED TIME RECORDING
+local badgeGivers = {} --BADGE FUNCTION
 --
 -- ██▒   █▓ ▒█████   ██▓  ▄▄▄█████▓ ▒█████   █    ██       ██▓     ▒█████   ██▓    
 --▓██░   █▒▒██▒  ██▒▓██▒  ▓  ██▒ ▓▒▒██▒  ██▒ ██  ▓██▒     ▓██▒    ▒██▒  ██▒▓██▒    

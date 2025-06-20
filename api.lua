@@ -85,6 +85,11 @@ function ui:Hotkey(menuName, sectionName, text, defaultKey)
     return hotkey
 end
 
+
+function ui:Notify(data)
+    core:notify(data)
+end
+
 function ui:Destroy()
     if window then
         window:Destroy()

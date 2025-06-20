@@ -7,6 +7,9 @@ local core = libraryLoader({
     smoothDragging = true,
 })
 
+local HttpService = game:GetService("HttpService")
+local SAVE_FILE_NAME = "KrionUI_Settings.json"
+
 local ui = {}
 
 local window = core.newWindow({
@@ -137,4 +140,45 @@ function ui:Hotkey(menuName, sectionName, text, defaultKey)
     return hotkey
 end
 
+-- Save settings to disk
+function ui:SaveSettings(settingsTable)
+    local json = HttpService:JSONEncode(settingsTable)
+    if writefile then
+        writefile(SAVE_FILE_NAME, json)
+    else
+        warn("writefile function not available")
+    end
+end
+
+-- Load settings from disk
+function ui:LoadSettings()
+    if isfile and isfile(SAVE_FILE_NAME) then
+        local json = readfile(SAVE_FILE_NAME)
+        local ok, data = pcall(function()
+            return HttpService:JSONDecode(json)
+        end)
+        if ok and type(data) == "table" then
+            return data
+        else
+            warn("Failed to decode saved settings")
+            return {}
+        end
+    else
+        return {}
+    end
+end
+
 return ui
+
+-- 
+-- ██▒   █▓ ▒█████   ██▓  ▄▄▄█████▓ ▒█████   █    ██       ██▓     ▒█████   ██▓    
+--▓██░   █▒▒██▒  ██▒▓██▒  ▓  ██▒ ▓▒▒██▒  ██▒ ██  ▓██▒     ▓██▒    ▒██▒  ██▒▓██▒    
+-- ▓██  █▒░▒██░  ██▒▒██░  ▒ ▓██░ ▒░▒██░  ██▒▓██  ▒██░     ▒██░    ▒██░  ██▒▒██░    
+--  ▒██ █░░▒██   ██░▒██░  ░ ▓██▓ ░ ▒██   ██░▓▓█  ░██░     ▒██░    ▒██   ██░▒██░    
+--   ▒▀█░  ░ ████▓▒░░██████▒▒██▒ ░ ░ ████▓▒░▒▒█████▓  ██▓ ░██████▒░ ████▓▒░░██████▒
+--   ░ ▐░  ░ ▒░▒░▒░ ░ ▒░▓  ░▒ ░░   ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒  ▒▓▒ ░ ▒░▓  ░░ ▒░▒░▒░ ░ ▒░▓  ░
+--   ░ ░░    ░ ▒ ▒░ ░ ░ ▒  ░  ░      ░ ▒ ▒░ ░░▒░ ░ ░  ░▒  ░ ░ ▒  ░  ░ ▒ ▒░ ░ ░ ▒  ░
+--     ░░  ░ ░ ░ ▒    ░ ░   ░      ░ ░ ░ ▒   ░░░ ░ ░  ░     ░ ░   ░ ░ ░ ▒    ░ ░   
+--      ░      ░ ░      ░  ░           ░ ░     ░       ░      ░  ░    ░ ░      ░  ░
+--     ░                                               ░                           
+--

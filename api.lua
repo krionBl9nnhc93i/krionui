@@ -90,6 +90,50 @@ function ui:Notify(data)
     core:notify(data)
 end
 
+local UserInputService = game:GetService("UserInputService")
+
+function addHotkey(self, data)
+    local hotkey = {}
+    hotkey._key = data.defaultKey or Enum.KeyCode.Unknown
+    hotkey._callbacks = {}
+
+    function hotkey:setHotkey(key)
+        self._key = key
+    end
+
+    function hotkey:GetHotkey()
+        return self._key
+    end
+
+    function hotkey:bindToEvent(eventName, callback)
+        if eventName == "onPress" then
+            table.insert(self._callbacks, callback)
+        end
+    end
+
+    -- hotkey listener
+    if not self._hotkeyInputConnected then
+        UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if gameProcessed then return end
+
+            -- check hotkey callback's
+            for _, hk in pairs(self._hotkeys or {}) do
+                if input.KeyCode == hk._key then
+                    for _, cb in ipairs(hk._callbacks) do
+                        cb()
+                    end
+                end
+            end
+        end)
+        self._hotkeyInputConnected = true
+    end
+
+    self._hotkeys = self._hotkeys or {}
+    table.insert(self._hotkeys, hotkey)
+
+    return hotkey
+end
+
 function ui:Destroy()
     if window then
         window:Destroy()

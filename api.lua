@@ -1,5 +1,5 @@
 -- krion api
--- load library.lua ve expose kolay arayüz
+-- i cum this api
 
 local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
 
@@ -11,7 +11,7 @@ local core = libraryLoader({
 
 local ui = {}
 
--- Window oluştur
+-- window
 local window = core.newWindow({
     text = 'Krion UI',
     resize = true,
@@ -37,13 +37,13 @@ local function getSection(menuName, sectionName)
     return sections[menuName][sectionName]
 end
 
--- Button
+-- button
 function ui:Button(menuName, sectionName, text, callback)
     local section = getSection(menuName, sectionName)
     section:addButton({text = text}, callback)
 end
 
--- Toggle
+-- toggle
 function ui:Toggle(menuName, sectionName, text, callback)
     local section = getSection(menuName, sectionName)
     local toggle = section:addToggle({text = text})
@@ -51,7 +51,7 @@ function ui:Toggle(menuName, sectionName, text, callback)
     return toggle
 end
 
--- Slider
+-- slider
 function ui:Slider(menuName, sectionName, text, min, max, defaultValue, callback, step)
     local section = getSection(menuName, sectionName)
     local slider = section:addSlider({
@@ -64,7 +64,7 @@ function ui:Slider(menuName, sectionName, text, min, max, defaultValue, callback
     return slider
 end
 
--- ColorPicker
+-- colorpicker
 function ui:ColorPicker(menuName, sectionName, text, defaultColor, callback)
     local section = getSection(menuName, sectionName)
     local colorPicker = section:addColorPicker({
@@ -74,7 +74,7 @@ function ui:ColorPicker(menuName, sectionName, text, defaultColor, callback)
     return colorPicker
 end
 
--- Textbox
+-- textbox
 function ui:Textbox(menuName, sectionName, text, callback)
     local section = getSection(menuName, sectionName)
     local textbox = section:addTextbox({text = text})
@@ -84,12 +84,12 @@ function ui:Textbox(menuName, sectionName, text, callback)
     return textbox
 end
 
--- Notify (bildirim)
+-- notify
 function ui:Notify(data)
     core:notify(data)
 end
 
--- Hotkey sistemi
+-- hotkey
 
 local UserInputService = game:GetService("UserInputService")
 ui._hotkeys = {}
@@ -131,14 +131,14 @@ function ui:Hotkey(menuName, sectionName, text, defaultKey)
         end
     end
 
-    -- Hotkey listesine ekle ve listener başlat
+    -- hotkey listener
     table.insert(ui._hotkeys, hotkey)
     ui:addHotkeyListener()
 
     return hotkey
 end
 
--- Destroy (ui'yi kapat)
+-- destroy
 function ui:Destroy()
     if window then
         window:Destroy()

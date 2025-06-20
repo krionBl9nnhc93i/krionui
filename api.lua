@@ -7,7 +7,6 @@ local core = libraryLoader({
     smoothDragging = true,
 })
 
-
 local ui = {}
 
 local window = core.newWindow({

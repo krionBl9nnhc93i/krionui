@@ -1,6 +1,6 @@
 -- krion api
 -- so sexy i cum
-local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))
+local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))
 local core = libraryLoader({
     theme = 'grape',
     rounding = true,

@@ -7852,5 +7852,17 @@ do
     end
 end
 
-
-return ui 
+return function(options)
+    if options then
+        if options.theme then
+            ui.setTheme(options.theme)
+        end
+        if options.rounding ~= nil then
+            ui.rounding = options.rounding
+        end
+        if options.smoothDragging ~= nil then
+            ui.smoothDragging = options.smoothDragging
+        end
+    end
+    return ui
+end

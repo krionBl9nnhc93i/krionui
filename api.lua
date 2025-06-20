@@ -128,6 +128,7 @@ function ui:Hotkey(menuName, sectionName, text, defaultKey)
 
     table.insert(ui._hotkeys, hotkey)
     ui:addHotkeyListener()
+    ui.coreWindow = window
 
     return hotkey
 end

@@ -1,6 +1,6 @@
 -- krion api
--- so sexy i cum
-local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))
+-- i cum to this api cuz works so sexy !!!11!!1!
+local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
 local core = libraryLoader({
     theme = 'grape',
     rounding = true,
@@ -21,7 +21,7 @@ local sections = {}
 local function getMenu(name)
     if not menus[name] then
         menus[name] = window:addMenu({text = name})
-        sections[name] = {}  -- dont change here !
+        sections[name] = {}
     end
     return menus[name]
 end
@@ -76,25 +76,45 @@ function ui:Textbox(menuName, sectionName, text, callback)
     return textbox
 end
 
-function ui:Hotkey(menuName, sectionName, text, defaultKey)
-    local section = getSection(menuName, sectionName)
-    local hotkey = section:addHotkey({text = text})
-    if defaultKey then
-        hotkey:setHotkey(defaultKey)
-    end
-    return hotkey
-end
-
-
 function ui:Notify(data)
     core:notify(data)
 end
 
+function ui:Destroy()
+    if window then
+        window:Destroy()
+        window = nil
+        menus = {}
+        sections = {}
+        ui._hotkeys = nil
+        ui._hotkeyInputConnected = nil
+    end
+end
+
 local UserInputService = game:GetService("UserInputService")
 
-function addHotkey(self, data)
+ui._hotkeys = {}
+ui._hotkeyInputConnected = false
+
+function ui:addHotkeyListener()
+    if ui._hotkeyInputConnected then return end
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+        for _, hk in pairs(ui._hotkeys) do
+            if input.KeyCode == hk._key then
+                for _, cb in ipairs(hk._callbacks) do
+                    cb()
+                end
+            end
+        end
+    end)
+    ui._hotkeyInputConnected = true
+end
+
+function ui:Hotkey(menuName, sectionName, text, defaultKey)
+    local section = getSection(menuName, sectionName)
     local hotkey = {}
-    hotkey._key = data.defaultKey or Enum.KeyCode.Unknown
+    hotkey._key = defaultKey or Enum.KeyCode.Unknown
     hotkey._callbacks = {}
 
     function hotkey:setHotkey(key)
@@ -111,49 +131,10 @@ function addHotkey(self, data)
         end
     end
 
-    -- hotkey listener
-    if not self._hotkeyInputConnected then
-        UserInputService.InputBegan:Connect(function(input, gameProcessed)
-            if gameProcessed then return end
-
-            -- check hotkey callback's
-            for _, hk in pairs(self._hotkeys or {}) do
-                if input.KeyCode == hk._key then
-                    for _, cb in ipairs(hk._callbacks) do
-                        cb()
-                    end
-                end
-            end
-        end)
-        self._hotkeyInputConnected = true
-    end
-
-    self._hotkeys = self._hotkeys or {}
-    table.insert(self._hotkeys, hotkey)
+    table.insert(ui._hotkeys, hotkey)
+    ui:addHotkeyListener()
 
     return hotkey
 end
 
-function ui:Destroy()
-    if window then
-        window:Destroy()
-        window = nil
-        menus = {}
-        sections = {}
-    end
-end
-
 return ui
-
---
--- ██▒   █▓ ▒█████   ██▓  ▄▄▄█████▓ ▒█████   █    ██       ██▓     ▒█████   ██▓    
---▓██░   █▒▒██▒  ██▒▓██▒  ▓  ██▒ ▓▒▒██▒  ██▒ ██  ▓██▒     ▓██▒    ▒██▒  ██▒▓██▒    
--- ▓██  █▒░▒██░  ██▒▒██░  ▒ ▓██░ ▒░▒██░  ██▒▓██  ▒██░     ▒██░    ▒██░  ██▒▒██░    
---  ▒██ █░░▒██   ██░▒██░  ░ ▓██▓ ░ ▒██   ██░▓▓█  ░██░     ▒██░    ▒██   ██░▒██░    
---   ▒▀█░  ░ ████▓▒░░██████▒▒██▒ ░ ░ ████▓▒░▒▒█████▓  ██▓ ░██████▒░ ████▓▒░░██████▒
---   ░ ▐░  ░ ▒░▒░▒░ ░ ▒░▓  ░▒ ░░   ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒  ▒▓▒ ░ ▒░▓  ░░ ▒░▒░▒░ ░ ▒░▓  ░
---   ░ ░░    ░ ▒ ▒░ ░ ░ ▒  ░  ░      ░ ▒ ▒░ ░░▒░ ░ ░  ░▒  ░ ░ ▒  ░  ░ ▒ ▒░ ░ ░ ▒  ░
---     ░░  ░ ░ ░ ▒    ░ ░   ░      ░ ░ ░ ▒   ░░░ ░ ░  ░     ░ ░   ░ ░ ░ ▒    ░ ░   
---      ░      ░ ░      ░  ░           ░ ░     ░       ░      ░  ░    ░ ░      ░  ░
---     ░                                               ░                           
---

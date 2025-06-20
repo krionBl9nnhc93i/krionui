@@ -1,31 +1,10 @@
 -- krion api
--- i cum to this api cuz works so sexy !!!11!!1!
-local libraryLoader
-
-do
-    local success, loader = pcall(function()
-        return loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
-    end)
-
-    if not success or type(loader) ~= "function" then
-        error("❌ Krion not loaded... :(")
-    end
-
-    libraryLoader = loader
-end
-
-local core = libraryLoader({
-    theme = 'grape',
-    rounding = true,
-    smoothDragging = true,
-})
-
-local HttpService = game:GetService("HttpService")
-local SAVE_FILE_NAME = "Krion_Settings.json"
+-- so sexy i cum
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
 
 local ui = {}
 
-local window = core.newWindow({
+local window = library.newWindow({
     text = 'Krion.dev',
     resize = true,
     size = Vector2.new(550, 376),
@@ -93,7 +72,7 @@ function ui:Textbox(menuName, sectionName, text, callback)
 end
 
 function ui:Notify(data)
-    core:notify(data)
+    library:notify(data)
 end
 
 function ui:Destroy()
@@ -153,45 +132,4 @@ function ui:Hotkey(menuName, sectionName, text, defaultKey)
     return hotkey
 end
 
--- Save settings to disk
-function ui:SaveSettings(settingsTable)
-    local json = HttpService:JSONEncode(settingsTable)
-    if writefile then
-        writefile(SAVE_FILE_NAME, json)
-    else
-        warn("writefile function not available")
-    end
-end
-
--- Load settings from disk
-function ui:LoadSettings()
-    if isfile and isfile(SAVE_FILE_NAME) then
-        local json = readfile(SAVE_FILE_NAME)
-        local ok, data = pcall(function()
-            return HttpService:JSONDecode(json)
-        end)
-        if ok and type(data) == "table" then
-            return data
-        else
-            warn("Failed to decode saved settings")
-            return {}
-        end
-    else
-        return {}
-    end
-end
-
 return ui
-
--- 
--- ██▒   █▓ ▒█████   ██▓  ▄▄▄█████▓ ▒█████   █    ██       ██▓     ▒█████   ██▓    
---▓██░   █▒▒██▒  ██▒▓██▒  ▓  ██▒ ▓▒▒██▒  ██▒ ██  ▓██▒     ▓██▒    ▒██▒  ██▒▓██▒    
--- ▓██  █▒░▒██░  ██▒▒██░  ▒ ▓██░ ▒░▒██░  ██▒▓██  ▒██░     ▒██░    ▒██░  ██▒▒██░    
---  ▒██ █░░▒██   ██░▒██░  ░ ▓██▓ ░ ▒██   ██░▓▓█  ░██░     ▒██░    ▒██   ██░▒██░    
---   ▒▀█░  ░ ████▓▒░░██████▒▒██▒ ░ ░ ████▓▒░▒▒█████▓  ██▓ ░██████▒░ ████▓▒░░██████▒
---   ░ ▐░  ░ ▒░▒░▒░ ░ ▒░▓  ░▒ ░░   ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒  ▒▓▒ ░ ▒░▓  ░░ ▒░▒░▒░ ░ ▒░▓  ░
---   ░ ░░    ░ ▒ ▒░ ░ ░ ▒  ░  ░      ░ ▒ ▒░ ░░▒░ ░ ░  ░▒  ░ ░ ▒  ░  ░ ▒ ▒░ ░ ░ ▒  ░
---     ░░  ░ ░ ░ ▒    ░ ░   ░      ░ ░ ░ ▒   ░░░ ░ ░  ░     ░ ░   ░ ░ ░ ▒    ░ ░   
---      ░      ░ ░      ░  ░           ░ ░     ░       ░      ░  ░    ░ ░      ░  ░
---     ░                                               ░                           
---

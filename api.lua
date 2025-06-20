@@ -1,11 +1,19 @@
 -- krion api
--- so sexy i cum
-local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
+-- load library.lua ve expose kolay arayüz
+
+local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
+
+local core = libraryLoader({
+    theme = 'grape',
+    rounding = true,
+    smoothDragging = true,
+})
 
 local ui = {}
 
-local window = library.newWindow({
-    text = 'Krion.dev',
+-- Window oluştur
+local window = core.newWindow({
+    text = 'Krion UI',
     resize = true,
     size = Vector2.new(550, 376),
 })
@@ -13,12 +21,12 @@ local window = library.newWindow({
 local menus = {}
 local sections = {}
 
-local function getMenu(name)
-    if not menus[name] then
-        menus[name] = window:addMenu({text = name})
-        sections[name] = {}
+local function getMenu(menuName)
+    if not menus[menuName] then
+        menus[menuName] = window:addMenu({text = menuName})
+        sections[menuName] = {}
     end
-    return menus[name]
+    return menus[menuName]
 end
 
 local function getSection(menuName, sectionName)
@@ -29,11 +37,13 @@ local function getSection(menuName, sectionName)
     return sections[menuName][sectionName]
 end
 
+-- Button
 function ui:Button(menuName, sectionName, text, callback)
     local section = getSection(menuName, sectionName)
     section:addButton({text = text}, callback)
 end
 
+-- Toggle
 function ui:Toggle(menuName, sectionName, text, callback)
     local section = getSection(menuName, sectionName)
     local toggle = section:addToggle({text = text})
@@ -41,27 +51,30 @@ function ui:Toggle(menuName, sectionName, text, callback)
     return toggle
 end
 
-function ui:Slider(menuName, sectionName, text, min, max, default, callback, step)
+-- Slider
+function ui:Slider(menuName, sectionName, text, min, max, defaultValue, callback, step)
     local section = getSection(menuName, sectionName)
     local slider = section:addSlider({
         text = text,
         min = min,
         max = max,
+        val = defaultValue,
         step = step or 1,
-        val = default,
     }, callback)
     return slider
 end
 
+-- ColorPicker
 function ui:ColorPicker(menuName, sectionName, text, defaultColor, callback)
     local section = getSection(menuName, sectionName)
     local colorPicker = section:addColorPicker({
         text = text,
-        color = defaultColor or Color3.fromRGB(255, 255, 255),
+        color = defaultColor or Color3.new(1, 1, 1),
     }, callback)
     return colorPicker
 end
 
+-- Textbox
 function ui:Textbox(menuName, sectionName, text, callback)
     local section = getSection(menuName, sectionName)
     local textbox = section:addTextbox({text = text})
@@ -71,23 +84,14 @@ function ui:Textbox(menuName, sectionName, text, callback)
     return textbox
 end
 
+-- Notify (bildirim)
 function ui:Notify(data)
-    library:notify(data)
+    core:notify(data)
 end
 
-function ui:Destroy()
-    if window then
-        window:Destroy()
-        window = nil
-        menus = {}
-        sections = {}
-        ui._hotkeys = nil
-        ui._hotkeyInputConnected = nil
-    end
-end
+-- Hotkey sistemi
 
 local UserInputService = game:GetService("UserInputService")
-
 ui._hotkeys = {}
 ui._hotkeyInputConnected = false
 
@@ -95,10 +99,10 @@ function ui:addHotkeyListener()
     if ui._hotkeyInputConnected then return end
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if gameProcessed then return end
-        for _, hk in pairs(ui._hotkeys) do
-            if input.KeyCode == hk._key then
-                for _, cb in ipairs(hk._callbacks) do
-                    cb()
+        for _, hotkey in pairs(ui._hotkeys) do
+            if input.KeyCode == hotkey._key then
+                for _, callback in ipairs(hotkey._callbacks) do
+                    callback()
                 end
             end
         end
@@ -108,7 +112,8 @@ end
 
 function ui:Hotkey(menuName, sectionName, text, defaultKey)
     local section = getSection(menuName, sectionName)
-    local hotkey = {}
+    local hotkey = section:addHotkey({text = text})
+
     hotkey._key = defaultKey or Enum.KeyCode.Unknown
     hotkey._callbacks = {}
 
@@ -126,11 +131,23 @@ function ui:Hotkey(menuName, sectionName, text, defaultKey)
         end
     end
 
+    -- Hotkey listesine ekle ve listener başlat
     table.insert(ui._hotkeys, hotkey)
     ui:addHotkeyListener()
-    ui.coreWindow = window
 
     return hotkey
+end
+
+-- Destroy (ui'yi kapat)
+function ui:Destroy()
+    if window then
+        window:Destroy()
+        window = nil
+        menus = {}
+        sections = {}
+        ui._hotkeys = {}
+        ui._hotkeyInputConnected = false
+    end
 end
 
 return ui

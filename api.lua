@@ -1,6 +1,19 @@
 -- krion api
 -- i cum to this api cuz works so sexy !!!11!!1!
-local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
+local libraryLoader
+
+do
+    local success, loader = pcall(function()
+        return loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
+    end)
+
+    if not success or type(loader) ~= "function" then
+        error("❌ Krion not loaded... :(")
+    end
+
+    libraryLoader = loader
+end
+
 local core = libraryLoader({
     theme = 'grape',
     rounding = true,
@@ -8,7 +21,7 @@ local core = libraryLoader({
 })
 
 local HttpService = game:GetService("HttpService")
-local SAVE_FILE_NAME = "KrionUI_Settings.json"
+local SAVE_FILE_NAME = "Krion_Settings.json"
 
 local ui = {}
 

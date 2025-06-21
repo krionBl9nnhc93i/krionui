@@ -93,12 +93,25 @@ function ui:Notify(msg, time)
 end
 
 function ui:Selector(menu, section, label, options, defaultIdx, cb)
+    assert(type(menu) == "string", "Menu adı string olmalı")
+    assert(type(section) == "string", "Section adı string olmalı")
+    assert(type(options) == "table", "Options bir tablo olmalı")
+    
     local sec = getSection(menu, section)
     local selector = sec:addSelector({
         text = label,
         options = options,
         default = defaultIdx or 1
-    }, cb)
+    }, function(idx)
+        if cb then
+            local success, err = pcall(function()
+                cb(idx, options[idx])
+            end)
+            if not success then
+                warn("Selector callback hatası:", err)
+            end
+        end
+    end)
     
     -- get() and set() method
     function selector:get()
@@ -108,9 +121,22 @@ function ui:Selector(menu, section, label, options, defaultIdx, cb)
     function selector:set(idx)
         if type(idx) == "number" and idx >= 1 and idx <= #options then
             self.selected = idx
-            -- Call the original set method if it exists
             if self._set then
-                self:_set(idx)
+                local success, err = pcall(function()
+                    self:_set(idx)
+                end)
+                if not success then
+                    warn("Selector set hatası:", err)
+                end
+            end
+            -- Callback'i çağır
+            if cb then
+                local success, err = pcall(function()
+                    cb(idx, options[idx])
+                end)
+                if not success then
+                    warn("Selector callback hatası:", err)
+                end
             end
         end
     end

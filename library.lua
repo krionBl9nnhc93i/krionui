@@ -7869,17 +7869,17 @@ selector.set = function(self, idx)
 end
 
         selector.new = function(self, options, defaultIdx)
-            local new = setmetatable({}, self)
-            new.options = options or {"Option1", "Option2"}
-            new.selected = defaultIdx or 1
-            new.binds = {}
-new.instances = {
+    local new = setmetatable({}, self)
+    new.options = options or {"Option1", "Option2"}
+    new.selected = defaultIdx or 1
+    new.binds = {}
+    new.instances = {
         controlFrame = controlFrame,
         button = button,
         dropdown = dropdownFrame
     }
-new.get = self.get
-new.set = self.set
+    new.get = self.get
+    new.set = self.set
     return new
 end
 

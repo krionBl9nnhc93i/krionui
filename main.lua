@@ -10,7 +10,25 @@ else
     scriptToLoad = nil
 end
 
-local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/api.lua"))()
+-- KrionUI Main Loader
+local success, ui = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/api.lua"))()
+end)
+
+if not success then
+    warn("[KrionUI] API yüklenemedi:", ui)
+    return
+end
+
+-- Universal script'i yükle
+local success, err = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/games/universal.lua"))()
+end)
+
+if not success then
+    warn("[KrionUI] Script yüklenirken hata:", err)
+    ui:Notify("Script yüklenirken hata oluştu!")
+end
 
 if scriptToLoad then
     local chunk = loadfile(scriptToLoad)

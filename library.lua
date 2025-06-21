@@ -8019,5 +8019,21 @@ end
     end
     elemClasses.selector = selector
 end
+
+ui.Selector = function(...)
+    local section = {
+        controls = {},
+        instances = {
+            controlMenu = Instance.new("Frame")
+        }
+    }
+    setmetatable(section, {__index = elemClasses.section})
+    return elemClasses.section.addSelector(section, {
+        options = select(4, ...),
+        default = select(5, ...),
+        text = select(3, ...)
+    }, select(6, ...))
+end
+
     return ui
 end

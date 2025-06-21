@@ -241,4 +241,13 @@ function ui:updateHotkey(hotkeyObj, key)
     end
 end
 
+function ui:Selector(menu, section, label, options, defaultIdx, cb)
+    local sec = getSection(menu, section)
+    return sec:addSelector({
+        text = label,
+        options = options,
+        default = defaultIdx
+    }, cb)
+end
+
 return ui

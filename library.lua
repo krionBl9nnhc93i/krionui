@@ -1,3 +1,4 @@
+print("LIBRARY PATCHED")
 local function destroyAllKrionUIFrom(parent)
     for _, gui in ipairs(parent:GetChildren()) do
         if gui:IsA("ScreenGui") and gui:FindFirstChild("#notif-container") then

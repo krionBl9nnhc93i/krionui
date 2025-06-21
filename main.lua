@@ -13,15 +13,19 @@ end
 local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/api.lua"))()
 
 if scriptToLoad then
-    local chunk = loadfile(scriptToLoad)
-    if chunk then
-        local ok, err = pcall(chunk)
-        if not ok then
-            ui:Notify("script crashed: " .. tostring(err))
+    local success, result = pcall(function()
+        local fileContent = readfile(scriptToLoad)
+        local chunk = loadstring(fileContent)
+        if chunk then
+            return chunk()
+        else
+            error("Script yüklenemedi: " .. scriptToLoad)
         end
-    else
-        ui:Notify("script can't be loaded: " .. tostring(scriptToLoad))
+    end)
+    
+    if not success then
+        ui:Notify("Script hatası: " .. tostring(result))
     end
 else
-    ui:Notify("no compatible script found for this game")
+    ui:Notify("Bu oyun için uyumlu script bulunamadı")
 end

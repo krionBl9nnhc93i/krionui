@@ -210,4 +210,35 @@ function ui:Destroy()
     end
 end
 
+-- Label update
+function ui:updateLabel(labelObj, newText)
+    if labelObj and labelObj.setText then
+        labelObj:setText(newText)
+    end
+end
+
+-- Slider update
+function ui:updateSlider(sliderObj, opts)
+    if not sliderObj then return end
+    if opts.text and sliderObj.setText then sliderObj:setText(opts.text) end
+    if opts.min and sliderObj.setMin then sliderObj:setMin(opts.min) end
+    if opts.max and sliderObj.setMax then sliderObj:setMax(opts.max) end
+    if opts.value and sliderObj.setValue then sliderObj:setValue(opts.value) end
+    if opts.step and sliderObj.setStep then sliderObj:setStep(opts.step) end
+end
+
+-- Toggle update
+function ui:updateToggle(toggleObj, state)
+    if toggleObj and toggleObj.setState then
+        toggleObj:setState(state)
+    end
+end
+
+-- Hotkey update
+function ui:updateHotkey(hotkeyObj, key)
+    if hotkeyObj and hotkeyObj.setHotkey then
+        hotkeyObj:setHotkey(key)
+    end
+end
+
 return ui

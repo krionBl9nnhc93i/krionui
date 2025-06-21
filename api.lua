@@ -1,8 +1,46 @@
--- krion api
--- i cum yeah...
+-- get krion today !
+local HttpService = game:GetService("HttpService")
 
-local httpService = game:GetService("HttpService")
+-- games folder
+local gamesFolder = "games"
+local baseConfigFolder = "Krion_configs"
 
+local function getGameId()
+    return tostring(game.GameId or game.PlaceId or "unknown")
+end
+
+local function fileExists(path)
+    return (isfile and isfile(path)) or false
+end
+
+local function getScriptFile()
+    local gid = getGameId()
+
+    local gameScript = gamesFolder.."/"..gid..".lua"
+    if fileExists(gameScript) then
+        return gameScript, gid
+    end
+
+    local universalScript = gamesFolder.."/universal.lua"
+    if fileExists(universalScript) then
+        return universalScript, "universal"
+    end
+
+    return nil, nil
+end
+
+local function getCurrentConfigPath(cfgid)
+    local folder = baseConfigFolder.."/"..cfgid
+    if not isfolder(baseConfigFolder) then
+        makefolder(baseConfigFolder)
+    end
+    if not isfolder(folder) then
+        makefolder(folder)
+    end
+    return folder.."/settings.json"
+end
+
+-- loadstring
 local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
 local core = libraryLoader({
     theme = 'grape',
@@ -19,12 +57,21 @@ local window = core.newWindow({
 
 local menus, sections = {}, {}
 
-local configFile = "krion_config.json"
+-- Script detection, config path
+local scriptFile, scriptId = getScriptFile()
+if not scriptId then
+    scriptId = getGameId()
+end
+if not scriptFile then
+    scriptFile = "YOK"
+end
+local configFile = getCurrentConfigPath(scriptId)
 local config = {}
 
+-- Config save/load
 local function saveConfig()
     if writefile then
-        writefile(configFile, httpService:JSONEncode(config))
+        writefile(configFile, HttpService:JSONEncode(config))
     end
 end
 
@@ -32,7 +79,7 @@ local function loadConfig()
     if readfile and isfile and isfile(configFile) then
         local raw = readfile(configFile)
         if raw and #raw > 0 then
-            local ok, data = pcall(function() return httpService:JSONDecode(raw) end)
+            local ok, data = pcall(function() return HttpService:JSONDecode(raw) end)
             if ok and type(data) == "table" then
                 config = data
             end
@@ -80,7 +127,7 @@ function ui:Slider(menu, section, text, min, max, val, cb, step)
     local key = menu.."_"..section.."_"..text
     local v = config[key] or val or min or 0
     local slider = sec:addSlider({
-        text = text, min = min, max = max, val = v, step = step or 1
+        text = text, min = min, max = max, value = v, step = step or 1
     }, function(newVal)
         config[key] = newVal
         saveConfig()
@@ -135,9 +182,10 @@ function ui:Notify(msg, time)
         data.duration = msg.duration or time or 2
     end
     if not data.duration then data.duration = time or 2 end
-    core:notify(data)
+    core.notify(data)
 end
 
+-- HOTKEY
 local UserInputService = game:GetService("UserInputService")
 ui._hotkeys = {}
 ui._hotkeyInputConnected = false
@@ -195,6 +243,17 @@ function ui:Destroy()
         sections = {}
         ui._hotkeys = {}
         ui._hotkeyInputConnected = false
+    end
+end
+
+-- loads auto config
+if scriptFile and scriptFile ~= "YOK" then
+    local code = readfile and readfile(scriptFile)
+    if code then
+        local f = loadstring(code)
+        if f then
+            coroutine.wrap(f)()
+        end
     end
 end
 

@@ -7856,7 +7856,7 @@ do
     local selector = {} do
         selector.__index = selector
         setmetatable(selector, elemClasses.baseElement)
-        selector.class = 'selector'
+        selector.class = "selector"
 
         selector.new = function(self, options, defaultIdx)
             local new = setmetatable({}, self)
@@ -7864,51 +7864,70 @@ do
             new.selected = defaultIdx or 1
             new.binds = {}
 
-            -- UI
-            local instances = {}
-            instances.controlFrame = Instance.new('Frame')
-            instances.controlFrame.BackgroundTransparency = 1
-            instances.controlFrame.Name = '#control'
-            instances.controlFrame.Size = UDim2.new(1, 0, 0, 20)
-            instances.controlFrame.Visible = true
-            instances.controlFrame.ZIndex = 34
+            -- Ana frame
+            local controlFrame = Instance.new("Frame")
+            controlFrame.BackgroundTransparency = 1
+            controlFrame.Name = "#control"
+            controlFrame.Size = UDim2.new(1, 0, 0, 22)
+            controlFrame.ZIndex = 34
 
-            local button = Instance.new('TextButton')
+            -- Ana buton
+            local button = Instance.new("TextButton")
+            button.Name = "#selectorButton"
+            button.Size = UDim2.new(1, 0, 1, 0)
             button.BackgroundColor3 = theme.Button1
-            button.Size = UDim2.fromScale(1, 1)
-            button.Name = '#selectorButton'
-            button.Text = new.options[new.selected]
             button.TextColor3 = theme.TextPrimary
             button.TextSize = 14
-            button.Font = 'SourceSans'
+            button.Font = Enum.Font.SourceSans
+            button.TextXAlignment = Enum.TextXAlignment.Left
+            button.Text = "  " .. new.options[new.selected] .. "  ▼"
             button.ZIndex = 35
-            button.Parent = instances.controlFrame
+            button.Parent = controlFrame
 
-            local dropdownFrame = Instance.new('Frame')
-            dropdownFrame.Name = '#dropdown'
+            local round = Instance.new("UICorner")
+            round.CornerRadius = UDim.new(0, 4)
+            round.Parent = button
+
+            -- Açılır menü
+            local dropdownFrame = Instance.new("Frame")
+            dropdownFrame.Name = "#dropdown"
             dropdownFrame.Visible = false
-            dropdownFrame.Size = UDim2.new(1, 0, 0, #new.options*20)
+            dropdownFrame.Size = UDim2.new(1, 0, 0, #new.options * 22)
             dropdownFrame.Position = UDim2.new(0, 0, 1, 0)
             dropdownFrame.BackgroundColor3 = theme.Window3
-            dropdownFrame.Parent = instances.controlFrame
             dropdownFrame.ZIndex = 36
+            dropdownFrame.Parent = controlFrame
+
+            local stroke = Instance.new("UIStroke")
+            stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            stroke.Color = theme.Stroke
+            stroke.Thickness = 1
+            stroke.Parent = dropdownFrame
 
             for i, opt in ipairs(new.options) do
-                local optBtn = Instance.new('TextButton')
-                optBtn.Text = opt
-                optBtn.BackgroundTransparency = 1
+                local optBtn = Instance.new("TextButton")
+                optBtn.Text = "  " .. opt
+                optBtn.BackgroundColor3 = theme.Window3
                 optBtn.TextColor3 = theme.TextPrimary
                 optBtn.TextSize = 14
-                optBtn.Size = UDim2.new(1, 0, 0, 20)
-                optBtn.Position = UDim2.new(0, 0, 0, (i-1)*20)
-                optBtn.Font = 'SourceSans'
+                optBtn.Font = Enum.Font.SourceSans
+                optBtn.Size = UDim2.new(1, 0, 0, 22)
+                optBtn.Position = UDim2.new(0, 0, 0, (i-1)*22)
                 optBtn.ZIndex = 37
+                optBtn.AutoButtonColor = false
                 optBtn.Parent = dropdownFrame
+
+                optBtn.MouseEnter:Connect(function()
+                    optBtn.BackgroundColor3 = theme.Button2
+                end)
+                optBtn.MouseLeave:Connect(function()
+                    optBtn.BackgroundColor3 = theme.Window3
+                end)
                 optBtn.MouseButton1Click:Connect(function()
-                    button.Text = opt
+                    button.Text = "  " .. opt .. "  ▼"
                     new.selected = i
                     dropdownFrame.Visible = false
-                    new:fireEvent('onSelect', i, opt)
+                    new:fireEvent("onSelect", i, opt)
                 end)
             end
 
@@ -7916,74 +7935,69 @@ do
                 dropdownFrame.Visible = not dropdownFrame.Visible
             end)
 
-            new.instances = instances
+            -- Kapanma: başka yere tıklayınca kapansın
+            game:GetService("UserInputService").InputBegan:Connect(function(input, gp)
+                if dropdownFrame.Visible and input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    local mouse = game:GetService("UserInputService"):GetMouseLocation()
+                    local absPos = dropdownFrame.AbsolutePosition
+                    local absSize = dropdownFrame.AbsoluteSize
+                    if not (mouse.X > absPos.X and mouse.X < absPos.X + absSize.X and mouse.Y > absPos.Y and mouse.Y < absPos.Y + absSize.Y) then
+                        dropdownFrame.Visible = false
+                    end
+                end
+            end)
+
+            new.instances = {
+                controlFrame = controlFrame,
+                button = button,
+                dropdown = dropdownFrame
+            }
             return new
         end
 
         selector.get = function(self)
             return self.selected, self.options[self.selected]
         end
+
         selector.set = function(self, idx)
             idx = math.clamp(idx, 1, #self.options)
             self.selected = idx
-            self.instances.selectorButton.Text = self.options[idx]
+            self.instances.button.Text = "  " .. self.options[idx] .. "  ▼"
         end
 
         elemClasses.section.addSelector = function(self, settings, callback)
-            if (not typeof(settings) == 'table') then
-                return error('expected type table for settings', 2)
+            if (not typeof(settings) == "table") then
+                return error("expected type table for settings", 2)
             end
 
             local options = settings.options or {"CFrame", "Velocity", "Walkspeed"}
             local defaultIdx = settings.default or 1
-            local label = settings.text or "Selector"
+            local label = settings.text or "Speed Mode"
 
             local selector = selector:new(options, defaultIdx)
             selector.section = self
             table.insert(self.controls, selector)
 
             -- Label
-            local labelObj = Instance.new('TextLabel')
+            local labelObj = Instance.new("TextLabel")
             labelObj.BackgroundTransparency = 1
             labelObj.Text = label
             labelObj.TextColor3 = theme.TextPrimary
             labelObj.TextSize = 14
             labelObj.Size = UDim2.new(0.5, 0, 1, 0)
             labelObj.Position = UDim2.new(0, 6, 0, 0)
-            labelObj.Font = 'SourceSans'
+            labelObj.Font = Enum.Font.SourceSans
             labelObj.Parent = selector.instances.controlFrame
 
             selector.instances.controlFrame.Parent = self.instances.controlMenu
 
-            if (typeof(callback) == 'function') then
-                selector:bindToEvent('onSelect', callback)
+            if (typeof(callback) == "function") then
+                selector:bindToEvent("onSelect", callback)
             end
             return selector
         end
     end
     elemClasses.selector = selector
 end
-
-function ui:Selector(menu, section, label, options, defaultIdx, cb)
-    local sec = getSection(menu, section)
-    return sec:addSelector({
-        text = label,
-        options = options,
-        default = defaultIdx
-    }, cb)
-end
-
-return function(options)
-    if options then
-        if options.theme then
-            ui.setTheme(options.theme)
-        end
-        if options.rounding ~= nil then
-            ui.rounding = options.rounding
-        end
-        if options.smoothDragging ~= nil then
-            ui.smoothDragging = options.smoothDragging
-        end
-    end
     return ui
 end

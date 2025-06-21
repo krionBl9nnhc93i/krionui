@@ -12,4 +12,23 @@
 
 soon !
 --]]
-print("test")
+
+local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/api.lua"))()
+
+-- Bu oyun için özel scriptler buraya gelecek
+ui:Notify("2423809996 oyunu için script yüklendi!")
+
+-- Örnek özellikler
+ui:Button(
+    "Özel", "Aksiyonlar", "Test Butonu",
+    function()
+        ui:Notify("Test butonu çalışıyor!")
+    end
+)
+
+ui:Toggle(
+    "Özel", "Ayarlar", "Özel Toggle",
+    function(enabled)
+        ui:Notify("Toggle: " .. (enabled and "Açık" or "Kapalı"))
+    end
+)

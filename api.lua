@@ -99,18 +99,22 @@ function ui:Selector(menu, section, label, options, defaultIdx, cb)
         options = options,
         default = defaultIdx or 1
     }, cb)
+    
     -- get() and set() method
     function selector:get()
-        return selector.selected or defaultIdx or 1, options[selector.selected or defaultIdx or 1]
+        return self.selected or defaultIdx or 1, options[self.selected or defaultIdx or 1]
     end
+    
     function selector:set(idx)
         if type(idx) == "number" and idx >= 1 and idx <= #options then
-            selector.selected = idx
-            if selector.set then
-                selector:set(idx)
+            self.selected = idx
+            -- Call the original set method if it exists
+            if self._set then
+                self:_set(idx)
             end
         end
     end
+    
     return selector
 end
 

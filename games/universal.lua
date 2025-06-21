@@ -11,5 +11,5 @@ if speedSelector and speedSelector.get then
     local i, v = speedSelector:get()
     speedSelector:set(2)
 else
-    warn("Selector'da get() ve/veya set() yok!")
+    warn("Selector doesnt have get() and set()")
 end

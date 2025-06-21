@@ -7873,6 +7873,15 @@ end
             new.options = options or {"Option1", "Option2"}
             new.selected = defaultIdx or 1
             new.binds = {}
+new.instances = {
+        controlFrame = controlFrame,
+        button = button,
+        dropdown = dropdownFrame
+    }
+new.get = self.get
+new.set = self.set
+    return new
+end
 
             -- Ana frame
             local controlFrame = Instance.new("Frame")

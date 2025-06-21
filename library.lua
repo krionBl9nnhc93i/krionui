@@ -7852,24 +7852,6 @@ do
     end
 end
 
--- dropdown
-
-function ui:Dropdown(menu, section, text, items, cb, default)
-    local sec = getSection(menu, section)
-    local key = menu.."_"..section.."_"..text
-    local saved = config[key] or default or (items[1] or "")
-    local dropdown = sec:addDropdown({
-        text = text,
-        items = items,
-        value = saved,
-    }, function(selected)
-        config[key] = selected
-        if saveConfig then saveConfig() end
-        if cb then cb(selected) end
-    end)
-    return dropdown
-end
-
 return function(options)
     if options then
         if options.theme then

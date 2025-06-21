@@ -1,52 +1,19 @@
--- get krion today !
 local HttpService = game:GetService("HttpService")
-
--- games folder
-local gamesFolder = "games"
-local baseConfigFolder = "Krion_configs"
 
 local function getGameId()
     return tostring(game.GameId or game.PlaceId or "unknown")
 end
-
-local function fileExists(path)
-    return (isfile and isfile(path)) or false
-end
-
-local function getScriptFile()
+local baseConfigFolder = "Krion_configs"
+local function getCurrentConfigPath()
     local gid = getGameId()
-
-    local gameScript = gamesFolder.."/"..gid..".lua"
-    if fileExists(gameScript) then
-        return gameScript, gid
-    end
-
-    local universalScript = gamesFolder.."/universal.lua"
-    if fileExists(universalScript) then
-        return universalScript, "universal"
-    end
-
-    return nil, nil
-end
-
-local function getCurrentConfigPath(cfgid)
-    local folder = baseConfigFolder.."/"..cfgid
-    if not isfolder(baseConfigFolder) then
-        makefolder(baseConfigFolder)
-    end
-    if not isfolder(folder) then
-        makefolder(folder)
-    end
+    local folder = baseConfigFolder.."/"..gid
+    if not isfolder(baseConfigFolder) then makefolder(baseConfigFolder) end
+    if not isfolder(folder) then makefolder(folder) end
     return folder.."/settings.json"
 end
 
--- loadstring
 local libraryLoader = loadstring(game:HttpGet('https://raw.githubusercontent.com/krionBl9nnhc93i/krionui/main/library.lua'))()
-local core = libraryLoader({
-    theme = 'grape',
-    rounding = true,
-    smoothDragging = true,
-})
+local core = libraryLoader()
 
 local ui = {}
 local window = core.newWindow({
@@ -56,37 +23,23 @@ local window = core.newWindow({
 })
 
 local menus, sections = {}, {}
-
--- Script detection, config path
-local scriptFile, scriptId = getScriptFile()
-if not scriptId then
-    scriptId = getGameId()
-end
-if not scriptFile then
-    scriptFile = "YOK"
-end
-local configFile = getCurrentConfigPath(scriptId)
+local configFile = getCurrentConfigPath()
 local config = {}
 
--- Config save/load
 local function saveConfig()
     if writefile then
         writefile(configFile, HttpService:JSONEncode(config))
     end
 end
-
 local function loadConfig()
     if readfile and isfile and isfile(configFile) then
         local raw = readfile(configFile)
         if raw and #raw > 0 then
             local ok, data = pcall(function() return HttpService:JSONDecode(raw) end)
-            if ok and type(data) == "table" then
-                config = data
-            end
+            if ok and type(data) == "table" then config = data end
         end
     end
 end
-
 loadConfig()
 
 local function getMenu(menuName)
@@ -96,7 +49,6 @@ local function getMenu(menuName)
     end
     return menus[menuName]
 end
-
 local function getSection(menuName, sectionName)
     local menu = getMenu(menuName)
     if not sections[menuName][sectionName] then
@@ -109,19 +61,16 @@ function ui:Button(menu, section, text, cb)
     local sec = getSection(menu, section)
     sec:addButton({text = text}, cb)
 end
-
 function ui:Toggle(menu, section, text, cb)
     local sec = getSection(menu, section)
     local key = menu.."_"..section.."_"..text
     local state = config[key] or false
     local toggle = sec:addToggle({text = text, state = state}, function(val)
-        config[key] = val
-        saveConfig()
+        config[key] = val; saveConfig()
         if cb then cb(val) end
     end)
     return toggle
 end
-
 function ui:Slider(menu, section, text, min, max, val, cb, step)
     local sec = getSection(menu, section)
     local key = menu.."_"..section.."_"..text
@@ -129,53 +78,42 @@ function ui:Slider(menu, section, text, min, max, val, cb, step)
     local slider = sec:addSlider({
         text = text, min = min, max = max, value = v, step = step or 1
     }, function(newVal)
-        config[key] = newVal
-        saveConfig()
+        config[key] = newVal; saveConfig()
         if cb then cb(newVal) end
     end)
     return slider
 end
-
 function ui:ColorPicker(menu, section, text, def, cb)
     local sec = getSection(menu, section)
     local key = menu.."_"..section.."_"..text
     local col = config[key]
-    if col then
-        def = Color3.new(col.r, col.g, col.b)
-    end
+    if col then def = Color3.new(col.r, col.g, col.b) end
     local picker = sec:addColorPicker({
         text = text,
         color = def or Color3.new(1,1,1)
     }, function(newCol)
-        config[key] = {r = newCol.r, g = newCol.g, b = newCol.b}
-        saveConfig()
+        config[key] = {r = newCol.r, g = newCol.g, b = newCol.b}; saveConfig()
         if cb then cb(newCol) end
     end)
     return picker
 end
-
 function ui:Textbox(menu, section, text, cb)
     local sec = getSection(menu, section)
     local key = menu.."_"..section.."_"..text
     local box = sec:addTextbox({text = text})
-    if config[key] then
-        box:setText(config[key])
-    end
+    if config[key] then box:setText(config[key]) end
     if cb then
         box:bindToEvent('onFocusLost', function(val)
-            config[key] = val
-            saveConfig()
+            config[key] = val; saveConfig()
             cb(val)
         end)
     end
     return box
 end
-
 function ui:Notify(msg, time)
     local data = {}
     if type(msg) == "string" then
-        data.title = "info"
-        data.message = msg
+        data.title = "info"; data.message = msg
     elseif type(msg) == "table" then
         data.title = msg.title or "info"
         data.message = msg.message or ""
@@ -185,26 +123,21 @@ function ui:Notify(msg, time)
     core.notify(data)
 end
 
--- HOTKEY
 local UserInputService = game:GetService("UserInputService")
 ui._hotkeys = {}
 ui._hotkeyInputConnected = false
-
 function ui:addHotkeyListener()
     if ui._hotkeyInputConnected then return end
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if gameProcessed then return end
         for _, hotkey in pairs(ui._hotkeys) do
             if input.KeyCode == hotkey._key then
-                for _, cb in ipairs(hotkey._callbacks) do
-                    pcall(cb)
-                end
+                for _, cb in ipairs(hotkey._callbacks) do pcall(cb) end
             end
         end
     end)
     ui._hotkeyInputConnected = true
 end
-
 function ui:Hotkey(menu, section, text, defaultKey)
     local sec = getSection(menu, section)
     local key = menu.."_"..section.."_"..text
@@ -214,15 +147,9 @@ function ui:Hotkey(menu, section, text, defaultKey)
     hotkey._callbacks = {}
 
     function hotkey:setHotkey(k)
-        self._key = k
-        config[key] = k
-        saveConfig()
+        self._key = k; config[key] = k; saveConfig()
     end
-
-    function hotkey:GetHotkey()
-        return self._key
-    end
-
+    function hotkey:GetHotkey() return self._key end
     function hotkey:bindToEvent(ev, cb)
         if ev == "onPress" and typeof(cb) == "function" then
             table.insert(self._callbacks, cb)
@@ -231,29 +158,13 @@ function ui:Hotkey(menu, section, text, defaultKey)
 
     table.insert(ui._hotkeys, hotkey)
     ui:addHotkeyListener()
-
     return hotkey
 end
-
 function ui:Destroy()
     if window then
-        window:Destroy()
-        window = nil
-        menus = {}
-        sections = {}
-        ui._hotkeys = {}
-        ui._hotkeyInputConnected = false
-    end
-end
-
--- loads auto config
-if scriptFile and scriptFile ~= "YOK" then
-    local code = readfile and readfile(scriptFile)
-    if code then
-        local f = loadstring(code)
-        if f then
-            coroutine.wrap(f)()
-        end
+        window:Destroy(); window = nil
+        menus = {}; sections = {}
+        ui._hotkeys = {}; ui._hotkeyInputConnected = false
     end
 end
 

@@ -28,13 +28,13 @@ if scriptToLoad then
     if chunk then
         local ok, err = pcall(chunk)
         if not ok then
-            warn("Script yüklenirken hata: "..tostring(err))
+            warn("script crash: "..tostring(err))
         end
     else
-        warn("Script yüklenemedi: "..tostring(scriptToLoad))
+        warn("script cant loaded: "..tostring(scriptToLoad))
     end
 else
-    warn("Hiçbir script bulunamadı!")
+    warn("not found compatatable script for this game")
 end
 
 -- save/load

@@ -11,32 +11,6 @@
      by voltou.lol                                                          
 --]]
 
-local gameId = tostring(game.GameId or game.PlaceId or "unknown")
-local gamesFolder = "games/"
-local scriptToLoad
-
-if isfile and isfile(gamesFolder..gameId..".lua") then
-    scriptToLoad = gamesFolder..gameId..".lua"
-elseif isfile and isfile(gamesFolder.."universal.lua") then
-    scriptToLoad = gamesFolder.."universal.lua"
-else
-    scriptToLoad = nil
-end
-
-if scriptToLoad then
-    local chunk = loadfile(scriptToLoad)
-    if chunk then
-        local ok, err = pcall(chunk)
-        if not ok then
-            warn("script crash: "..tostring(err))
-        end
-    else
-        warn("script cant loaded: "..tostring(scriptToLoad))
-    end
-else
-    warn("not found compatatable script for this game")
-end
-
 -- save/load
 local HttpService = game:GetService("HttpService")
 

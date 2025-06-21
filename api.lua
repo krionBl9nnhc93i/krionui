@@ -1,21 +1,49 @@
 --[[
- ██ ▄█▀ ██▀███   ██▓ ▒█████   ███▄    █      ▓█████▄ ▓█████ ██▒   █▓    ▄▄▄       ██▓███   ██▓
- ██▄█▒ ▓██ ▒ ██▒▓██▒▒██▒  ██▒ ██ ▀█   █      ▒██▀ ██▌▓█   ▀▓██░   █▒   ▒████▄    ▓██░  ██▒▓██▒
-▓███▄░ ▓██ ░▄█ ▒▒██▒▒██░  ██▒▓██  ▀█ ██▒     ░██   █▌▒███   ▓██  █▒░   ▒██  ▀█▄  ▓██░ ██▓▒▒██▒
-▓██ █▄ ▒██▀▀█▄  ░██░▒██   ██░▓██▒  ▐▌██▒     ░▓█▄   ▌▒▓█  ▄  ▒██ █░░   ░██▄▄▄▄██ ▒██▄█▓▒ ▒░██░
-▒██▒ █▄░██▓ ▒██▒░██░░ ████▓▒░▒██░   ▓██░ ██▓ ░▒████▓ ░▒████▒  ▒▀█░      ▓█   ▓██▒▒██▒ ░  ░░██░
-▒ ▒▒ ▓▒░ ▒▓ ░▒▓░░▓  ░ ▒░▒░▒░ ░ ▒░   ▒ ▒  ▒▓▒  ▒▒▓  ▒ ░░ ▒░ ░  ░ ▐░      ▒▒   ▓▒█░▒▓▒░ ░  ░░▓  
+ ██ ▄█▀ ██▀███   ██▓ ▒█████   ███▄    █      ▓█████▄ ▓█████ ██▒   █▓    ▄▄▄       ██▓███   
+ ██▄█▒ ▓██ ▒ ██▒▓██▒▒██▒  ██▒ ██ ▀█   █      ▒██▀ ██▌▓█   ▀▓██░   █▒   ▒████▄    ▓██░  ██▒
+▓███▄░ ▓██ ░▄█ ▒▒██▒▒██░  ██▒▓██  ▀█ ██▒     ░██   █▌▒███   ▓██  █▒░   ▒██  ▀█▄  ▓██░ ██▓▒
+▓██ █▄ ▒██▀▀█▄  ░██░▒██   ██░▓██▒  ▐▌██▒     ░▓█▄   ▌▒▓█  ▄  ▒██ █░░   ░██▄▄▄▄██ ▒██▄█▓▒ ▒
+▒██▒ █▄░██▓ ▒██▒░██░░ ████▓▒░▒██░   ▓██░ ██▓ ░▒████▓ ░▒████▒  ▒▀█░      ▓█   ▓██▒▒██▒ ░  ░
+▒ ▒▒ ▓▒░ ▒▓ ░▒▓░░▓  ░ ▒░▒░▒░ ░ ▒░   ▒ ▒  ▒▓▒  ▒▒▓  ▒ ░░ ▒░ ░  ░ ▐░      ▒▒   ▓▒█░▒▓▒░ ░  ░
 ░ ░▒ ▒░  ░▒ ░ ▒░ ▒ ░  ░ ▒ ▒░ ░ ░░   ░ ▒░ ░▒   ░ ▒  ▒  ░ ░  ░  ░ ░░       ▒   ▒▒ ░░▒ ░      ▒ ░
 ░ ░░ ░   ░░   ░  ▒ ░░ ░ ░ ▒     ░   ░ ░  ░    ░ ░  ░    ░       ░░       ░   ▒   ░░        ▒ ░
 ░  ░      ░      ░      ░ ░           ░   ░     ░       ░  ░     ░           ░  ░          ░  
-      by voltou.lol                                                          
+     by voltou.lol                                                          
 --]]
 
+local gameId = tostring(game.GameId or game.PlaceId or "unknown")
+local gamesFolder = "games/"
+local scriptToLoad
+
+if isfile and isfile(gamesFolder..gameId..".lua") then
+    scriptToLoad = gamesFolder..gameId..".lua"
+elseif isfile and isfile(gamesFolder.."universal.lua") then
+    scriptToLoad = gamesFolder.."universal.lua"
+else
+    scriptToLoad = nil
+end
+
+if scriptToLoad then
+    local chunk = loadfile(scriptToLoad)
+    if chunk then
+        local ok, err = pcall(chunk)
+        if not ok then
+            warn("Script yüklenirken hata: "..tostring(err))
+        end
+    else
+        warn("Script yüklenemedi: "..tostring(scriptToLoad))
+    end
+else
+    warn("Hiçbir script bulunamadı!")
+end
+
+-- save/load
 local HttpService = game:GetService("HttpService")
 
 local function getGameId()
     return tostring(game.GameId or game.PlaceId or "unknown")
 end
+
 local baseConfigFolder = "Krion_configs"
 local function getCurrentConfigPath()
     local gid = getGameId()
@@ -44,6 +72,7 @@ local function saveConfig()
         writefile(configFile, HttpService:JSONEncode(config))
     end
 end
+
 local function loadConfig()
     if readfile and isfile and isfile(configFile) then
         local raw = readfile(configFile)

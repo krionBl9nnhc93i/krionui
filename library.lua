@@ -7858,6 +7858,16 @@ do
         setmetatable(selector, elemClasses.baseElement)
         selector.class = "selector"
 
+selector.get = function(self)
+    return self.selected, self.options[self.selected]
+end
+
+selector.set = function(self, idx)
+    idx = math.clamp(idx, 1, #self.options)
+    self.selected = idx
+    self.instances.button.Text = "  " .. self.options[idx] .. "  ▼"
+end
+
         selector.new = function(self, options, defaultIdx)
             local new = setmetatable({}, self)
             new.options = options or {"Option1", "Option2"}
